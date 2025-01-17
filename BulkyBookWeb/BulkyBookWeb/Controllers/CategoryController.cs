@@ -65,7 +65,6 @@ namespace BulkyBookWeb.Controllers
         {
             if (category.Name == category.DisplayOrder.ToString())
             {
-                //ModelState.AddModelError("CustomError", "The Display Order can not exactly match the name.");
                 ModelState.AddModelError("Name", "The Display Order can not exactly match the name.");
             }
             if (ModelState.IsValid)
@@ -75,6 +74,39 @@ namespace BulkyBookWeb.Controllers
                 return RedirectToAction("Index");
             }
             return View(category);
+        }
+
+
+        // Get Action Result for Delete
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var categoryFromDb = _db.Categories.Find(id);
+            //var categoryFromDbFirst = _db.Categories.FirstOrDefault(u => u.Id == id);
+            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+            return View(categoryFromDb);
+        }
+        // Post Action Result for Deleteing Objects in Database
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? id)
+        {
+            var categoryFromDb = _db.Categories.Find(id);
+            if(categoryFromDb == null)
+            {
+                return NotFound();
+            }
+            _db.Categories.Remove(categoryFromDb);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

@@ -31,15 +31,20 @@
             @foreach (var obj in Model)
             {
                 <tr>
-                    <td width="10%"><b>@obj.Id</b></td>
-                    <td width="35%"><i>@obj.Name</i></td>
-                    <td width="20%">@obj.DisplayOrder</td>
-                    <td width="30%">@obj.CreateDateTime</td>
-                    <td>
+                    <td width="12%"><b>@obj.Id</b></td>
+                    <td width="25%"><i>@obj.Name</i></td>
+                    <td width="12%">@obj.DisplayOrder</td>
+                    <td width="25%">@obj.CreateDateTime</td>
+                    <td width="25%">
                         <div class="w-75 btn-group" role="group">
                             <a asp-controller="Category" asp-action="Edit" asp-route-Id="@obj.Id"
-                            class="btn btnalert-primary mx-2">
+                            class="btn btn-primary mx-2">
                                 <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+
+                            <a asp-controller="Category" asp-action="Delete" asp-route-Id="@obj.Id"
+                               class="btn btn-danger mx-2">
+                                <i class="bi bi-trash3"></i> Delete
                             </a>
                         </div>
                     </td>

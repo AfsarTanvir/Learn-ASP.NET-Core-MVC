@@ -26,9 +26,51 @@ namespace BulkyBookWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
         {
+            if(category.Name == category.DisplayOrder.ToString())
+            {
+                //ModelState.AddModelError("CustomError", "The Display Order can not exactly match the name.");
+                ModelState.AddModelError("Name", "The Display Order can not exactly match the name.");
+            }
             if (ModelState.IsValid)
             {
                 _db.Categories.Add(category);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+
+
+        // Get Action Result for Edit
+        public IActionResult Edit(int? id)
+        {
+            if(id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var categoryFromDb = _db.Categories.Find(id);
+            //var categoryFromDbFirst = _db.Categories.FirstOrDefault(u => u.Id == id);
+            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+            return View(categoryFromDb);
+        }
+        // Post Action Result for Editing Objects in Database
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Category category)
+        {
+            if (category.Name == category.DisplayOrder.ToString())
+            {
+                //ModelState.AddModelError("CustomError", "The Display Order can not exactly match the name.");
+                ModelState.AddModelError("Name", "The Display Order can not exactly match the name.");
+            }
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Update(category);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
